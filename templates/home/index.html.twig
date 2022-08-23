@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home page{% endblock %}
+
+{% block body %}
+    <div class="relative bg-white">
+        <div class="lg:absolute lg:inset-0">
+            <div class="lg:absolute lg:inset-y-0 lg:left-0 lg:w-1/2">
+                <img class="h-64 w-full object-cover lg:absolute lg:h-full xl:h-full" src="https://images.unsplash.com/photo-1609741200064-2ef87d5eb200?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="">
+            </div>
+        </div>
+        <div class="relative pt-12 pb-16 px-4 sm:pt-16 sm:px-6 lg:px-8 lg:max-w-7xl lg:mx-auto lg:grid lg:grid-cols-2">
+
+            <div class="lg:col-start-2 lg:pl-8">
+                <div class="text-base max-w-prose mx-auto lg:max-w-lg lg:ml-auto lg:mr-0">
+                    <h2 class="leading-6 text-indigo-600 font-semibold tracking-wide uppercase">Interations Lab</h2>
+                    <h3 class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">Introduction</h3>
+                    <div class="mt-5 prose prose-indigo text-gray-500">
+                        <p class="mt-8 text-lg text-gray-500">
+                            Sur la base du volontariat, chacun note chaque jour les interactions professionnelles qu’il a eues (par exemple, Mathieu note Paul suite à un échange sur un webinaire, et inversement).
+                            Chacun voit les notes qu’on lui met, mais elles ne sont pas visibles par les autres, sauf par votre manager, qui s’engagent à ne pas les diffuser, évidemment.
+                            Il n’y a pas de critère préétabli, à vous de les définir quand vous notez et, si vous le souhaitez, de les partager dans vos commentaires ou oralement.
+                        </p>
+                        <p class="mt-5 text-lg text-gray-500">
+                            <em class="font-bold text-black text-xl">Objectifs : </em> Voir ce que ça fait de se noter, faire la part des choses entre le positif et le négatif, mettre en débat une question de société…
+                        </p>
+                        <p class="mt-5 text-lg text-gray-500">
+                            Le but est de débriefer collectivement, si vous en avez envie, vous pouvez vous filmer avec votre smartphone pour livrer vos impressions à chaud, façon “confessionnal”.
+                        </p>
+                    </div>
+                </div>
+                {% include 'home/_button_registerOrConnected.html.twig' %}
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

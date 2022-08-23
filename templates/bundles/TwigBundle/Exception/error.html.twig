@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{ status_code ~' '~ status_text }}{% endblock %}
+{% block body %}
+    <main class="min-h-full bg-cover bg-top sm:bg-top" style="background-image: url('https://images.unsplash.com/photo-1463871181391-8550cd89c179?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80')">
+        <div class="max-w-7xl mx-auto px-4 py-16 text-center sm:px-6 sm:py-24 lg:px-8 lg:py-48">
+            <p class="text-8xl md:text-5xl lg:text-5xl xl:text-6xl font-bold text-red-600 uppercase tracking-wide">Erreur {{ status_code }}</p>
+            <h1 class="mt-2 text-8xl font-extrabold text-white tracking-tight md:text-4xl lg:text-5xl">Ah ok! Je pense qu'il y a eu un problème.</h1>
+            <p class="mt-2 text-8xl font-medium text-white md:text-4xl lg:text-5xl">Il semble que votre demande n'a pu aboutir.</p>
+            <div class="mt-6">
+                <a href="{{ path('app_home') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-6xl md:text-4xl font-medium rounded-md text-black bg-white bg-opacity-90 hover:bg-opacity-80"> Home page </a>
+            </div>
+        </div>
+    </main>
+{% endblock %}
