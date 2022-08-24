@@ -9,11 +9,14 @@ use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
@@ -27,7 +30,11 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
+    public function register(
+		Request $request,
+		UserPasswordHasherInterface $userPasswordHasher,
+		EntityManagerInterface $entityManager,
+		SluggerInterface $slugger): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -42,6 +49,24 @@ class RegistrationController extends AbstractController
                 )
             );
 			$user->setCreatedAt(new \DateTime('now', new \DateTimeZone('Europe/Paris')));
+
+			/** @var UploadedFile $avatarFile */
+			$avatarFile = $form->get('avatar')->getData();
+
+			if($avatarFile) {
+				$originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+				$saveFilename = $slugger->slug($originalFilename);
+				$newFilename = $saveFilename.'_'.uniqid( 'Av', false ). '.' .$avatarFile->guessExtension();
+				try {
+					$avatarFile->move(
+						$this->getParameter('avatar_directory'),
+						$newFilename
+					);
+				}catch (FileException $e) {
+
+				}
+				$user->setAvatar($newFilename);
+			}
 
             $entityManager->persist($user);
             $entityManager->flush();
