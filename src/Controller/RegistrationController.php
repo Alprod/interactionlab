@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -34,7 +35,7 @@ class RegistrationController extends AbstractController
 		Request $request,
 		UserPasswordHasherInterface $userPasswordHasher,
 		EntityManagerInterface $entityManager,
-		SluggerInterface $slugger): Response
+		FileUploader $uploader ): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -54,17 +55,7 @@ class RegistrationController extends AbstractController
 			$avatarFile = $form->get('avatar')->getData();
 
 			if($avatarFile) {
-				$originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
-				$saveFilename = $slugger->slug($originalFilename);
-				$newFilename = $saveFilename.'_'.uniqid( 'Av', false ). '.' .$avatarFile->guessExtension();
-				try {
-					$avatarFile->move(
-						$this->getParameter('avatar_directory'),
-						$newFilename
-					);
-				}catch (FileException $e) {
-
-				}
+				$newFilename = $uploader->upload($avatarFile);
 				$user->setAvatar($newFilename);
 			}
 
