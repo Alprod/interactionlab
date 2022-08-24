@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -43,6 +45,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updatedAt = null;
+
+    #[ORM\OneToMany(mappedBy: 'issue', targetEntity: Feedback::class)]
+    private Collection $issueFeedback;
+
+    #[ORM\OneToMany(mappedBy: 'received', targetEntity: Feedback::class)]
+    private Collection $receivedFeedback;
+
+    public function __construct()
+    {
+        $this->issueFeedback = new ArrayCollection();
+        $this->receivedFeedback = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -170,6 +184,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(?\DateTimeInterface $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getIssueFeedback(): Collection
+    {
+        return $this->issueFeedback;
+    }
+
+    public function addIssueFeedback(Feedback $issueFeedback): self
+    {
+        if (!$this->issueFeedback->contains($issueFeedback)) {
+            $this->issueFeedback->add($issueFeedback);
+            $issueFeedback->setIssue($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIssueFeedback(Feedback $issueFeedback): self
+    {
+        if ($this->issueFeedback->removeElement($issueFeedback)) {
+            // set the owning side to null (unless already changed)
+            if ($issueFeedback->getIssue() === $this) {
+                $issueFeedback->setIssue(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Feedback>
+     */
+    public function getReceivedFeedback(): Collection
+    {
+        return $this->receivedFeedback;
+    }
+
+    public function addReceivedFeedback(Feedback $receivedFeedback): self
+    {
+        if (!$this->receivedFeedback->contains($receivedFeedback)) {
+            $this->receivedFeedback->add($receivedFeedback);
+            $receivedFeedback->setReceived($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceivedFeedback(Feedback $receivedFeedback): self
+    {
+        if ($this->receivedFeedback->removeElement($receivedFeedback)) {
+            // set the owning side to null (unless already changed)
+            if ($receivedFeedback->getReceived() === $this) {
+                $receivedFeedback->setReceived(null);
+            }
+        }
 
         return $this;
     }
