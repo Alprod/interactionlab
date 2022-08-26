@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\FeedbackRepository;
 use App\Repository\UserRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,11 +18,20 @@ class HomeController extends AbstractController
         return $this->render('home/index.html.twig', []);
     }
 
+	#[Route('/show', name: 'app_interactions')]
+	#[IsGranted('ROLE_USER')]
 	public function showAllInteraction(
 		UserRepository $userRepo,
 		FeedbackRepository $feedbackRepo,
 		Request $request )
 	{
-		return $this->render('',[]);
+		$user = $this->getUser();
+		$interactions = $userRepo->findAll();
+		$today = new \DateTime('today', new \DateTimeZone('Europe/Paris'));
+
+		return $this->render('home/interactionPage.html.twig',[
+			'user' => $user,
+			'interactions' => $interactions
+		]);
 	}
 }
