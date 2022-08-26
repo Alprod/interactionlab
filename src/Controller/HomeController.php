@@ -23,7 +23,7 @@ class HomeController extends AbstractController
 	public function showAllInteraction(
 		UserRepository $userRepo,
 		FeedbackRepository $feedbackRepo,
-		Request $request )
+		Request $request ): Response
 	{
 		$user = $this->getUser();
 		$interactions = $userRepo->findAll();
