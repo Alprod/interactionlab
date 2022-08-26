@@ -1,11 +1,10 @@
-<h1>Hi! Please confirm your email!</h1>
+{% apply inline_css(source('@styles/email.css')) %}
+<div class="container">
+    <img src="{{ email.image('@images/favicon_light.jpg') }}" class="logo" alt="logo">
+    <h1 class="titre">Bienvenue à Iteractions Lab</h1>
+    <p>Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant : <a href="{{ signedUrl }}">Confirmer mon Email</a>.</p>
+    <p>Ce lien expirera dans <span class="limit"> {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle', 'fr_FR') }}</span>.</p>
 
-<p>
-    Please confirm your email address by clicking the following link: <br><br>
-    <a href="{{ signedUrl }}">Confirm my Email</a>.
-    This link will expire in {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
-</p>
-
-<p>
-    Cheers!
-</p>
+    <p>A bientôt</p>
+</div>
+{% endapply %}

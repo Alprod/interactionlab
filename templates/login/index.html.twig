@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LoginController!{% endblock %}
+
+{% block body %}
+    {% if error %}
+        {% include '_alert.html.twig' with { 'color': 'red', 'flashText': error.messageKey|trans(error.messageData, 'security') } %}
+    {% endif %}
+    <h2 class="m-5 leading-6 text-indigo-600 font-semibold tracking-wide uppercase text-center">Interations Lab</h2>
+
+    <div class="max-w-full mx-10 lg:max-w-md lg:mx-auto">
+
+        <h1 class="my-3 text-center font-bold text-2xl md:text-4xl">Connexion</h1>
+        <p class=" text-center">Afin d'accéder à l'application et de commencé l'expérience</p>
+
+        <form action="{{ path('app_login') }}" method="POST">
+            <div class="my-6">
+                <label for="username" class="block text-lg md:text-md font-medium text-gray-700">Email</label>
+                <div class="mt-1">
+                    <input type="text" name="_username" id="username" value="{{ last_username }}" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                </div>
+            </div>
+            <div class="my-6">
+                <label for="password" class="block text-lg md:text-md font-medium text-gray-700">Mot de passe</label>
+                <div class="mt-1">
+                    <input type="password" name="_password" id="password" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                </div>
+            </div>
+            <div class="flex flex-col justify-center py-6">
+                <button type="submit" class="w-2/4 block mx-auto justify-center rounded-md border border-shy-500 shadow-sm px-4 py-2 bg-sky-500 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:mt-0 sm:col-start-1 sm:text-sm">Connection</button>
+                <a href="{{ path('app_home') }}" class="w-2/4 block mx-auto text-center my-3 underline underline-offset-2 text-lg md:text-md hover:cursor-pointer">Retour Accueil</a>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+        </form>
+    </div>
+{% endblock %}
