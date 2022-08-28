@@ -28,6 +28,10 @@ class HomeController extends AbstractController
 		$user = $this->getUser();
 		$interactions = $userRepo->findAll();
 		$today = new \DateTime('today', new \DateTimeZone('Europe/Paris'));
+		$key = array_search($user, $interactions, true);
+		if ($key !== false){
+			unset($interactions[$key]);
+		}
 
 		return $this->render('home/interactionPage.html.twig',[
 			'user' => $user,

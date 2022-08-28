@@ -11,9 +11,11 @@
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
+            {{ encore_entry_script_tags('global') }}
         {% endblock %}
     </head>
-    <body class="h-full">
+    <body class="h-full dark:bg-slate-700">
+        {% block header %}{% endblock %}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 {{ include('_alert.html.twig', { color : label, flashText : message}) }}
