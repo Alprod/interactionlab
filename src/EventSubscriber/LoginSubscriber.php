@@ -37,11 +37,11 @@ class LoginSubscriber extends AbstractController implements EventSubscriberInter
 		$date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
 		$day = $date->format('d-m-Y H:i:s');
 		$this->logger->info( 'Connecter : '. $user->getUserIdentifier().' le '. $day );
-		$this->addFlash('green', 'Cool!!!');
+		$this->addFlash('success', 'Cool!!! '. ucfirst($user->getLastname()). ' et bienvenu');
 	}
 
 	public function LogoutSuccessEvent( LogoutEvent $event ): void
 	{
-		$this->addFlash('blue', 'Salut');
+		$this->addFlash('success', 'Salut');
 	}
 }
