@@ -15,7 +15,9 @@
         {% endblock %}
     </head>
     <body class="h-full dark:bg-slate-700">
-        {% block header %}{% endblock %}
+        {% block header %}
+            {% include '_header.html.twig' %}
+        {% endblock %}
         {% for label, messages in app.flashes %}
             {% for message in messages %}
                 {{ include('_alert.html.twig', { color : label, flashText : message}) }}

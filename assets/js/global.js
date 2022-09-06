@@ -48,3 +48,12 @@ moonIcon.addEventListener('click', () => {
 // Invoke theme check on initial load
 themeCheck();
 
+// Closed alrt component
+let closedAlert = document.getElementById('closed')
+let alertComponent = document.querySelector('.alertComponent')
+if(closedAlert) {
+    closedAlert.addEventListener('click',() => {
+        alertComponent.classList.add('hidden','transition','duration-300','ease-in-out','delay-700');
+    });
+}
+

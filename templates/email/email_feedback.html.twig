@@ -1,0 +1,10 @@
+{% apply inline_css(source('@styles/email.css')) %}
+    <div class="container">
+        <img src="{{ email.image('@images/favicon_light.jpg') }}" class="logo" alt="logo">
+        <h1 class="titre">Iteractions Lab</h1>
+        <h4 class="title">Salut {{ username }}</h4>
+        <p class="content">Votre collègue {{ issue }} a écrit un feedback à votre propos, faites en de même !</p>
+        <a href="{{ url('app_login') }}" class="link">Faite un feedback</a>
+        <p>A très vite</p>
+    </div>
+{% endapply %}

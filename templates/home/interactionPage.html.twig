@@ -1,9 +1,6 @@
 {% extends 'base.html.twig' %}
 {% block title %}Interactions{% endblock %}
 {% set name = app.user.firstname|capitalize ~ ' ' ~ app.user.lastname|capitalize %}
-{% block header %}
-    {% include '_header.html.twig' %}
-{% endblock %}
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 dark:bg-slate-700">
     <!-- User interaction --->
@@ -69,12 +66,17 @@
                                 --->
                             </div>
                             <div>
-                                <div class="-mt-px flex divide-x divide-gray-200">
-                                    <div class="-ml-px w-0 flex-1 flex hover:bg-slate-700 hover:opacity-30 hover:rounded-br-lg hover:rounded-bl-lg focus:bg-slate-700 focus:opacity-30 focus:rounded-br-lg focus:rounded-bl-lg">
-                                        <a href="#" class="relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-100 dark:text-gray-400">
-                                            <!-- Heroicon name: solid/phone -->
+                                <div class="feedbackButton -mt-px flex divide-x divide-gray-200">
+                                    <div class="-ml-px w-0 flex-1 flex dark:hover:bg-slate-400 hover:bg-slate-700 hover:opacity-30 hover:rounded-br-lg hover:rounded-bl-lg focus:bg-slate-700  focus:opacity-30 focus:rounded-br-lg focus:rounded-bl-lg">
+                                        <button name="user"
+                                           data-uid="{{ interaction.id }}"
+                                           data-firstname="{{ interaction.firstname }}"
+                                           data-lastname="{{ interaction.lastname }}"
+                                           data-email="{{ interaction.email }}"
+                                           class="dataButtonFeedback relative w-0 flex-1 inline-flex items-center justify-center py-4 text-sm text-gray-700 font-medium border border-transparent rounded-br-lg hover:text-gray-100 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-xl dark:focus:text-gray-50">
                                             <span class="ml-3">Feedback</span>
-                                        </a>
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -84,4 +86,50 @@
         </div>
     </div>
 </div>
+    <!-- Modal include --->
+    {{ include('home/_modal_feedback.html.twig',{ feedForm : feedForm }) }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Show and hide Modal
+            let modalEvent = document.getElementById('modalEvent');
+            let cancelButton = document.querySelector('.cancel');
+
+            //Fermeture de la modal
+            cancelButton.addEventListener('click', () => {
+                modalEvent.classList.add('hidden');
+            });
+            //Ouverture de la modal + Transfet de donnée utilisateur
+            let titleModal = document.querySelector('.titleModal');
+            let uidModal = document.getElementById('uid');
+            let uemailModal = document.getElementById('uemail');
+            document.getElementsByName('user').forEach((u) =>{
+                u.addEventListener('click', () => {
+                    // Affichage de la modal
+                    modalEvent.classList.remove('hidden');
+                    titleModal.innerHTML = u.dataset.firstname + ' ' + u.dataset.lastname;
+                    uidModal.value = u.dataset.uid;
+                    uemailModal.value  = u.dataset.email;
+                    console.log(uemailModal.value);
+                })
+            });
+
+            let subimitButton = document.querySelector('.submited');
+            let textarea = document.getElementById('feedback_comment');
+            subimitButton.addEventListener('click', (e) => {
+                if( textarea.value === '' ){
+                    e.preventDefault()
+                    let errorMessage = document.getElementById('errorMessage')
+                    errorMessage.innerHTML = 'Ce champs ne doit pas être vide'
+                }
+            });
+
+            window.addEventListener('load', () => {
+                textarea.value = '';
+            })
+
+        })
+    </script>
 {% endblock %}
