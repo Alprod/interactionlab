@@ -3,19 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Feedback;
-use App\Entity\User;
 use App\Form\FeedbackType;
 use App\Repository\FeedbackRepository;
 use App\Repository\UserRepository;
+use App\Service\AllFeedbacksSendingOrReceivedByUserCurrentService;
+use App\Service\SendEmail;
 use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
@@ -23,31 +20,35 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(): Response
     {
-        return $this->render('home/index.html.twig', []);
+        return $this->render('home/index.html.twig');
     }
 
 
+	/**
+	 * @throws \Exception
+	 */
 	#[Route('/show', name: 'app_interactions')]
 	#[IsGranted('ROLE_USER')]
 	public function showAllInteraction(
 		UserRepository $userRepo,
 		Request $request,
 		ManagerRegistry $doctrine,
-		MailerInterface $mailer
+		SendEmail $email,
+		FeedbackRepository $feedbackRepo
 	): Response
 	{
+		$datasEmail = [];
 		$user = $this->getUser();
-		$interactions = $userRepo->findAll();
-		$today = new \DateTime('today', new \DateTimeZone('Europe/Paris'));
 		$em = $doctrine->getManager();
-		$key = array_search($user, $interactions, true);
-		if ($key !== false){
-			unset($interactions[$key]);
-		}
+		$interactions = $userRepo->findColleagues($user);
+		$feedbacksReceivedUserCurrent = $user->getReceivedFeedback();
+		$today = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
+
 		$feedback = new Feedback();
 		$feedForm = $this->createForm(FeedbackType::class, $feedback);
 		$feedForm->handleRequest($request);
 
+		//Verification du formulaire de feedback avec envoi d'email après submit
 		if ($feedForm->isSubmitted() && $feedForm->isValid()){
 			$dataId = $request->get('id');
 			$userReceived = $userRepo->findOneBy([ 'id' => $dataId ]);
@@ -58,30 +59,56 @@ class HomeController extends AbstractController
 			$em->persist($feedback);
 			$em->flush();
 
-			$email = (new TemplatedEmail())
-				->from('contact@disdes.net')
-				->to($userReceived->getEmail())
-				->subject('InteactionLab | feedback donner par un participant')
-				->htmlTemplate('email/email_feedback.html.twig')
-				->context([
-					'username' => $userReceived->fullName(),
-					'issue' => $request->get('appUser')
-				]);
+			$datasEmail['userEmail'] = $userReceived->getEmail();
+			$datasEmail['username'] = $userReceived->fullName();
+			$datasEmail['issue'] = $user->getLastname();
+
 			try {
-				$mailer->send($email);
-			}catch (\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $mail) {
-				$this->addFlash('error', $mail->getMessage("Une erreur c'est produit lors de l'envoie du mail"));
+				$email->sendEmailTemplated($datasEmail);
+				$this->addFlash('success', 'Votre feedback pour '.$userReceived->fullName().' a été envoyer');
+			}catch (\Exception $e) {
+				$this->addFlash('error', $e->getMessage());
 			}
 
-
-			$this->addFlash('success', 'Votre feedback a été envoyer');
 			return $this->redirectToRoute('app_interactions');
 		}
+
+		$allFeedsSend =  $this->allFeedbacksSendOrReceivedUserCurrent( $feedbackRepo, $today,'issue' );
+		$allFeedReceived = $this->allFeedbacksSendOrReceivedUserCurrent( $feedbackRepo, $today, 'received' );
+
+		$scoreTotalGrade = 0;
+		$middleScoreGradeInPercent = 0;
+
+		foreach ($feedbacksReceivedUserCurrent as $receivedUserCurrent ){
+			$scoreTotalGrade += $receivedUserCurrent->getGrade();
+		}
+
+		if( $scoreTotalGrade > 0){
+			$middleScoreGradeInPercent += round( ( 100/$scoreTotalGrade ) * count( $feedbacksReceivedUserCurrent) , 0 );
+		}
+
+		$receivedFeedToday = $feedbackRepo->findIssueFeedbackSince($user, $today);
+		//dd($receivedFeedToday);
 
 		return $this->render('home/interactionPage.html.twig',[
 			'user' => $user,
 			'interactions' => $interactions,
+			'allFeedsSend' => $allFeedsSend,
+			'allFeedReceived' => $allFeedReceived,
+			'middleScoreGradeInPercent' => $middleScoreGradeInPercent,
 			'feedForm' => $feedForm->createView()
 		]);
 	}
+
+	private function allFeedbacksSendOrReceivedUserCurrent(
+		FeedbackRepository $feedbackRepo,
+		\DateTime $today,
+		string $tableField): array
+	{
+		$checkDateGap = new AllFeedbacksSendingOrReceivedByUserCurrentService();
+		$checkDateGap->setTableField($tableField);
+		return $checkDateGap->checkDateGapFeedbacks( $feedbackRepo, $this->getUser(), $today );
+	}
+
+
 }

@@ -52,9 +52,6 @@ class RegistrationFormType extends AbstractType
 				'mapped' => false,
 				'required' => false,
 				'constraints' => [
-					new NotBlank([
-						'message' => 'Veuillez ajouter votre avatar'
-					]),
 					new File([
 						'maxSize' => '1024K',
 						'mimeTypes' => [

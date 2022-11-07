@@ -3,7 +3,6 @@ module.exports = {
     darkMode: 'class',
     content: [
         'templates/**/*.html.twig',
-        'templates/*.html.twig',
         'assets/js/**/*.js'
     ],
     theme: {

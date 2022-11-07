@@ -1,15 +1,23 @@
 monolog:
     channels:
         - loginsubscriber
+        - sendemail
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
 
 when@dev:
     monolog:
         handlers:
-            login_subscriber:
+            send_email_feedback:
                 type: stream
+                path: "%kernel.logs_dir%/%kernel.environment%/sendEmail.log"
+                level: debug
+                channels: [sendemail]
+
+            login_subscriber:
+                type: rotating_file
                 path: "%kernel.logs_dir%/%kernel.environment%/loginSubscriber.log"
                 level: debug
+                max_files: 15
                 channels: ['loginsubscriber']
 
             main:

@@ -50,7 +50,7 @@ class FeedbackRepository extends ServiceEntityRepository
 		;
 	}
 
-	public function findIssueFeednackSince($issue, $date)
+	public function findIssueFeedbackSince($issue, $date)
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.issue = :issue')->setParameter('issue', $issue)
