@@ -26,6 +26,9 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 	}
 
 
+	/**
+	 * @throws \Exception
+	 */
 	public function checkDateGapFeedbacks (FeedbackRepository $allFeed, $userCurrent ,$today): array
 	{
 		$datas =[];
@@ -34,29 +37,30 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 
 		foreach ($allFeedsSend as $k => $feedback){
 			$dateReceived  = $feedback->getCreatedAt();
-			$diffDate = $dateReceived->diff($today, true);
+			$dateStart = new \DateTime($today->format('Y-m-d'));
+			$dateEnd =new \DateTime($dateReceived->format('Y-m-d'));
+			$diffDate = $dateStart->diff($dateEnd);
+			
 
 			switch ($diffDate):
 				case $diffDate->y >= 1:
-					$gap = $diffDate->y;
-					$gapFeed = 'Il y a '. $gap . (($diffDate->y === 1) ? ' an':' ans');
+					$gapFeed = 'Il y a '. $diffDate->format('%y'. ($diffDate->y === 1) ? ' an':' ans');
 					break;
-				case $diffDate->days === 0:
-					$gapFeed = "haujourd'hui";
+				case $diffDate->d === 0:
+					$gapFeed = "Aujourd'hui";
 					break;
-				case $diffDate->days === 1:
+				case $diffDate->d === 1:
 					$gapFeed = 'Hier';
 					break;
-				case $diffDate->days >= 2 && $diffDate->days < 14 :
-					$gapFeed = 'Il y a ' . $diffDate->days . ' jours.';
+				case $diffDate->d >= 2 && $diffDate->d < 14 :
+					$gapFeed = 'Il y a ' . $diffDate->format('%d jours');
 					break;
-				case $diffDate->days >= 14 && $diffDate->days < 30 :
-					$gap = round($diffDate->days/7,0);
+				case $diffDate->d >= 14 && $diffDate->d < 30 :
+					$gap = round($diffDate->d/7,0);
 					$gapFeed = 'Il y a ' . $gap . ' semaines.';
 					break;
-				case $diffDate->days >= 30:
-					$gap = round($diffDate->days/30, 0);
-					$gapFeed = 'Il y a '. $gap . ' mois';
+				case $diffDate->m > 0:
+					$gapFeed = 'Il y a '. $diffDate->format('%m mois');
 					break;
 			endswitch;
 

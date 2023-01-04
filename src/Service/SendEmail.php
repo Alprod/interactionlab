@@ -5,6 +5,7 @@ namespace App\Service;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 
 class SendEmail extends AbstractController
@@ -20,7 +21,7 @@ class SendEmail extends AbstractController
 	/**
 	 * @throws \Exception
 	 */
-	public function sendEmailTemplated( array $datas ): void
+	public function sendEmailTemplated( array $datas, string $htmlFile ): void
 	{
 		$date = new \DateTime('now', new \DateTimeZone('Europe/Paris'));
 		$userCurrent = $this->getUser();
@@ -28,7 +29,7 @@ class SendEmail extends AbstractController
 			->from('contact@dsides.net')
 			->to($datas['userEmail'])
 			->subject('InteactionLab | feedback donner par un participant')
-			->htmlTemplate('email/email_feedback.html.twig');
+			->htmlTemplate('email/'.$htmlFile);
 
 		if($datas) {
 			$rmFirstElmnt = array_shift($datas);
@@ -45,7 +46,7 @@ class SendEmail extends AbstractController
 				'date_send_feedabck'=> $date->format('d/m/Y H:i:s'),
 				'user_recived_feedback' => $datas['username']
 			]);
-		}catch (\Symfony\Component\Mailer\Exception\TransportExceptionInterface $e){
+		}catch ( TransportExceptionInterface $e){
 			$this->logger->error($e->getMessage());
 		}
 	}

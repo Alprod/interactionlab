@@ -54,7 +54,7 @@ class FeedbackRepository extends ServiceEntityRepository
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.issue = :issue')->setParameter('issue', $issue)
-			->andWhere('f.createdAt >= :date')->setParameter('date', $date)
+			->andWhere('f.createdAt <= :date')->setParameter('date', $date)
 			->orderBy('f.createdAt', 'DESC')
 			->getQuery()
 			->getResult();
