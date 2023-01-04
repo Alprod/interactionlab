@@ -64,7 +64,7 @@ class HomeController extends AbstractController
 			$datasEmail['issue'] = $user->getLastname();
 
 			try {
-				$email->sendEmailTemplated($datasEmail);
+				$email->sendEmailTemplated($datasEmail, 'email_feedback.html.twig');
 				$this->addFlash('success', 'Votre feedback pour '.$userReceived->fullName().' a été envoyer');
 			}catch (\Exception $e) {
 				$this->addFlash('error', $e->getMessage());
@@ -87,11 +87,19 @@ class HomeController extends AbstractController
 			$middleScoreGradeInPercent += round( ( 100/$scoreTotalGrade ) * count( $feedbacksReceivedUserCurrent) , 0 );
 		}
 
-		$receivedFeedToday = $feedbackRepo->findIssueFeedbackSince($user, $today);
-		//dd($receivedFeedToday);
+		$issuFeedToday = $feedbackRepo->findIssueFeedbackSince($user, $today);
+		$count = 0;
+		foreach ($issuFeedToday as $feedToday) {
+			$todayFeed = $feedToday->getCreatedAt()->format('Y-m-d');
+			$date = $today->format('Y-m-d');
+			if($todayFeed === $date){
+				$count++;
+			}
+		}
 
 		return $this->render('home/interactionPage.html.twig',[
 			'user' => $user,
+			'countfeedToday' => $count,
 			'interactions' => $interactions,
 			'allFeedsSend' => $allFeedsSend,
 			'allFeedReceived' => $allFeedReceived,

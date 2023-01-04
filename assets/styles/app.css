@@ -9,7 +9,7 @@
         dark:bg-green-400
         hover:bg-green-100
     }
-    .btn-blue{
+    .btn-blue {
         @apply
             mt-3
             w-full
@@ -38,6 +38,7 @@
             sm:col-start-1
             sm:text-sm
     }
+
     .btn-red {
         @apply
             relative
@@ -60,6 +61,36 @@
             focus:ring-offset-2
             focus:ring-red-500
     }
+
+    .btn-deconnected-home-page {
+        @apply
+            inline-flex
+            w-full
+            items-center
+            justify-center
+            px-4
+            py-2
+            border
+            border-red-600
+            shadow-sm
+            text-base
+            font-medium
+            rounded-md
+            text-white
+            bg-red-600
+            dark:border-transparent
+            dark:bg-red-700
+            dark:hover:bg-red-800
+            dark:focus:ring-red-900
+            hover:bg-red-700
+            focus:outline-none
+            focus:ring-2
+            focus:ring-offset-2
+            focus:ring-red-500
+            sm:text-sm
+            sm:col-start-2
+    }
+
     .btn-green{
         @apply
             w-full
@@ -111,7 +142,8 @@
             focus:ring-2
             focus:ring-offset-2
             focus:ring-sky-500
-            sm:mt-0 sm:col-start-1
+            sm:mt-0
+            sm:col-start-1
             sm:text-sm
     }
     .btn-feed-received {
