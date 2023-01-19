@@ -28,12 +28,12 @@ class SendEmail extends AbstractController
 		$mail = (new TemplatedEmail())
 			->from('contact@dsides.net')
 			->to($datas['userEmail'])
-			->subject('InteactionLab | feedback donner par un participant')
+			->subject('InteractionLab | feedback donner par un participant')
 			->htmlTemplate('email/'.$htmlFile);
 
 		if($datas) {
-			$rmFirstElmnt = array_shift($datas);
-			if($rmFirstElmnt === null) {
+			$rmFirstElement = array_shift($datas);
+			if($rmFirstElement === null) {
 				throw new \RuntimeException("Un problème est survenu lors de l'envoi de votre mail");
 			}
 			$mail->context($datas);
@@ -43,8 +43,8 @@ class SendEmail extends AbstractController
 			$this->mailer->send($mail);
 			$this->logger->info('email envoyer à : '. $datas['username'], [
 				'userCurrent' => $userCurrent->fullname(),
-				'date_send_feedabck'=> $date->format('d/m/Y H:i:s'),
-				'user_recived_feedback' => $datas['username']
+				'date_send_feedback'=> $date->format('d/m/Y H:i:s'),
+				'user_received_feedback' => $datas['username']
 			]);
 		}catch ( TransportExceptionInterface $e){
 			$this->logger->error($e->getMessage());

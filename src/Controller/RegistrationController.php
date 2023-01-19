@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -115,7 +116,10 @@ class RegistrationController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
 
-	#[Route('verify/resend', name: 'app_verify_resend')]
+    /**
+     * @throws TransportExceptionInterface
+     */
+    #[Route('verify/resend', name: 'app_verify_resend')]
 	public function resendVerifyEmail(Request $request)
 	{
 		$em = $this->entityManager;
