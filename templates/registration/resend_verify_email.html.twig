@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Re-send verify email{% endblock %}
+{% block body %}
+	<div class="max-w-lg mx-auto">
+    <div class="grid grid-cols-1 items-center justify-items-center p-8">
+        <div class='m-8'>
+            <h1 class="mb-3 font-semibold">Verifier votre Email</h1>
+            <p class='mb-4'> Un email de verification a été renvoyer</p>
+            <a href="{{ path('app_login') }}" class="btn-blue">Connexion</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

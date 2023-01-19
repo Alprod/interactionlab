@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -25,7 +26,11 @@ class RegistrationController extends AbstractController
 {
     private EmailVerifier $emailVerifier;
 
-    public function __construct(EmailVerifier $emailVerifier)
+    public function __construct(
+		EmailVerifier $emailVerifier,
+		private RequestStack $requestStack,
+	    private EntityManagerInterface $entityManager
+    )
     {
         $this->emailVerifier = $emailVerifier;
     }
@@ -34,10 +39,10 @@ class RegistrationController extends AbstractController
     public function register(
 		Request $request,
 		UserPasswordHasherInterface $userPasswordHasher,
-		EntityManagerInterface $entityManager,
 		FileUploader $uploader ): Response
     {
         $user = new User();
+		$em = $this->entityManager;
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -59,8 +64,8 @@ class RegistrationController extends AbstractController
 				$user->setAvatar($newFilename);
 			}
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $em->persist($user);
+            $em->flush();
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
@@ -109,4 +114,26 @@ class RegistrationController extends AbstractController
 
         return $this->redirectToRoute('app_login');
     }
+
+	#[Route('verify/resend', name: 'app_verify_resend')]
+	public function resendVerifyEmail(Request $request)
+	{
+		$em = $this->entityManager;
+		$email = $request->getSession()->get('_username');
+		$user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
+
+		if(!$user) {
+			$this->addFlash('danger', 'Désolé mais '.$email.' ne fais pas partis d\'interactionLab. Veuiilez vous inscrire');
+			return $this->redirectToRoute('app_register');
+		}
+
+		$this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                (new TemplatedEmail())
+                    ->from(new Address('equipe@makelearn.fr', 'Interactions Lab teams'))
+                    ->to($user->getEmail())
+                    ->subject('Veuillez confirmé votre Email')
+                    ->htmlTemplate('registration/confirmation_email.html.twig')
+		);
+		return $this->render('registration/resend_verify_email.html.twig');
+	}
 }

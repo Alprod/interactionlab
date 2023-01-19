@@ -20,7 +20,7 @@ class FeedbackType extends AbstractType
 	            'attr' => [
 		            'min' => 0,
 		            'max'=> 5,
-		            'step' => 0.5,
+		            'step' => 0.1,
 	            ]
             ])
             ->add('comment', TextareaType::class, [
