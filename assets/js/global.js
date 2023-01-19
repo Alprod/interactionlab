@@ -147,15 +147,23 @@ rangeInput.addEventListener('input', (event) =>{
     let yellow50 = 'text-yellow-300/50';
 
     function switchCaseZero(item, y, y10, y50) {
-            item.classList.remove(y)
-            item.classList.remove(y50)
-            item.classList.add(y10)
-
+        item?.forEach((i) => {
+            i.classList.remove(y)
+            i.classList.remove(y50)
+            i.classList.add(y10)
+        })
     }
+
     function switchCaseDecimal(item, y, y10, y50) {
         item.classList.remove(y);
         item.classList.remove(y10);
         item.classList.add(y50);
+    }
+
+    function switchCase(item, y, y10, y50) {
+        item.classList.remove(y50);
+        item.classList.remove(y10);
+        item.classList.add(y);
     }
     function switchCaseInt10(item,item1, y, y10, y50) {
         item.classList.remove(y10)
@@ -170,17 +178,15 @@ rangeInput.addEventListener('input', (event) =>{
         item1.classList.add(y10)
     }
 
+    console.log(rangeValue);
     switch (true) {
         case rangeValue <= 0 :
-            switchCaseZero(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCaseZero(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCaseZero(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCaseZero(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCaseZero(allRangeInput[4], yellow, yellow10, yellow50)
+            switchCaseZero(allRangeInput, yellow, yellow10, yellow50)
             break
         case rangeValue >= 0.1 && rangeValue <= 0.8 :
             allRangeInput[0].classList.remove(yellow)
             allRangeInput[0].classList.add(yellow50)
+            switchCaseZero()
             break
 
         case rangeValue >= 0.9 && rangeValue <= 1 :
@@ -188,6 +194,7 @@ rangeInput.addEventListener('input', (event) =>{
             break
 
         case rangeValue >= 1.1 && rangeValue <= 1.8 :
+            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[1], yellow, yellow10, yellow50)
             break
         case rangeValue >= 1.9 && rangeValue <= 2:
@@ -195,6 +202,8 @@ rangeInput.addEventListener('input', (event) =>{
             break;
 
         case rangeValue >= 2.1 && rangeValue <= 2.8 :
+            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[2],yellow,yellow10,yellow50)
             break;
 
@@ -203,6 +212,9 @@ rangeInput.addEventListener('input', (event) =>{
             break;
 
         case rangeValue >= 3.1 && rangeValue <= 3.8:
+            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[3],yellow,yellow10,yellow50)
             break;
 
@@ -211,11 +223,17 @@ rangeInput.addEventListener('input', (event) =>{
             break;
 
         case rangeValue >= 4.1 && rangeValue <= 4.8:
+            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[3], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[4],yellow,yellow10,yellow50)
             break;
         case rangeValue >= 4.9:
-            allRangeInput[4].classList.remove(yellow50)
-            allRangeInput[4].classList.add(yellow)
+            allRangeInput.forEach((e) => {
+                e.classList.remove(yellow50);
+                e.classList.add(yellow)
+            })
     }
 })
 
