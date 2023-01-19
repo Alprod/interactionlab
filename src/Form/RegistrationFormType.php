@@ -60,7 +60,7 @@ class RegistrationFormType extends AbstractType
 							'image/jpg',
 							'image/png'
 						],
-						'mimeTypesMessage' => 'Veulliez choisir un format valide {{ types }}'
+						'mimeTypesMessage' => 'Veuillez choisir un format valide {{ types }}'
 					])
 				]
 	        ])

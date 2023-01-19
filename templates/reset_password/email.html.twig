@@ -1,0 +1,11 @@
+{% apply inline_css(source('@styles/email.css')) %}
+<div class="container">
+    <img src="{{ email.image('@images/favicon_light.jpg') }}" class="logo" alt="logo">
+    <h1 class="titre">Bienvenue à Interactions Lab</h1>
+    <p>Pour réinitialiser votre mot de passe, veuillez consulter le lien suivant</p>
+    <a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+    <p>Ce lien expirera dans <span class="limit"> {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle', 'fr_FR') }}</span>.</p>
+
+    <p>A bientôt</p>
+</div>
+{% endapply %}

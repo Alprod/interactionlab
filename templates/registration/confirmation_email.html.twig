@@ -1,7 +1,7 @@
 {% apply inline_css(source('@styles/email.css')) %}
 <div class="container">
     <img src="{{ email.image('@images/favicon_light.jpg') }}" class="logo" alt="logo">
-    <h1 class="titre">Bienvenue à Iteractions Lab</h1>
+    <h1 class="titre">Bienvenue à Interactions Lab</h1>
     <p>Veuillez confirmer votre adresse e-mail en cliquant sur le lien suivant : <a href="{{ signedUrl }}">Confirmer mon Email</a>.</p>
     <p>Ce lien expirera dans <span class="limit"> {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle', 'fr_FR') }}</span>.</p>
 
