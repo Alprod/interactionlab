@@ -155,8 +155,6 @@ btnFeedSend?.addEventListener('click', () => {
 });
 
 
-
-
 let allRangeInput = document.querySelectorAll('.range');
 let rangeInput = document.getElementById('feedback_grade');
 let yellow = 'text-yellow-300';
