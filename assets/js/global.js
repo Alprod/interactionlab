@@ -86,15 +86,35 @@ document.getElementsByName('user').forEach((u) =>{
 });
 
 // Verifier si le champ comment n'est pas vide
-let subimitButton = document.querySelector('.submited');
+let submitButton = document.querySelector('.submited');
 let textarea = document.getElementById('feedback_comment');
-subimitButton?.addEventListener('click', (e) => {
+let commentHelp = document.getElementById('comment_help')
+
+let num = 0
+if(commentHelp) commentHelp.innerHTML = num +'/300 caractères max.'
+textarea?.addEventListener('keyup', (e) => {
+    let str = e.target.value.trim().length
+    commentHelp.innerHTML = str +'/300 caractères max.'
+    if(str === 300 ) {
+        e.preventDefault()
+        console.log(str)
+    }
+
+})
+
+
+submitButton?.addEventListener('click', (e) => {
+    let numLettre = textarea.value.trim().length
+    let errorMessage = document.getElementById('errorMessage')
     if( textarea.value === '' ){
         e.preventDefault()
-        let errorMessage = document.getElementById('errorMessage')
         errorMessage.innerHTML = 'Ce champs ne doit pas être vide'
+    }else if(numLettre < 10){
+        e.preventDefault()
+        errorMessage.innerHTML = `Vous pouvez faire mieux que ça, ${numLettre} caractères il m'en faut 10 et on sera au top! `;
     }
-});
+}
+);
 
 
 let btnFeedSend = document.getElementById('btn-feed-send');
@@ -134,19 +154,20 @@ btnFeedSend?.addEventListener('click', () => {
     cardFeedListStateReceived.classList.add('hidden')
 });
 
+
+
+let allRangeInput = document.querySelectorAll('.range');
 let rangeInput = document.getElementById('feedback_grade');
+let yellow = 'text-yellow-300';
+let yellow10 = 'text-yellow-300/10';
+let yellow50 = 'text-yellow-300/50';
 
-rangeInput.value = 0;
+if(rangeInput) rangeInput.value = 0;
 
-rangeInput.addEventListener('input', (event) =>{
+rangeInput?.addEventListener('input', (event) =>{
 
-    let allRangeInput = document.querySelectorAll('.range');
     let rangeValue = event.target.value;
-    let yellow = 'text-yellow-300';
-    let yellow10 = 'text-yellow-300/10';
-    let yellow50 = 'text-yellow-300/50';
-
-    function switchCaseZero(item, y, y10, y50) {
+    const switchCaseZero = (item, y, y10, y50) => {
         item?.forEach((i) => {
             i.classList.remove(y)
             i.classList.remove(y50)
@@ -154,31 +175,35 @@ rangeInput.addEventListener('input', (event) =>{
         })
     }
 
-    function switchCaseDecimal(item, y, y10, y50) {
+    const switchCaseDecimal = (item, y, y10, y50) => {
         item.classList.remove(y);
         item.classList.remove(y10);
         item.classList.add(y50);
     }
 
-    function switchCase(item, y, y10, y50) {
+    const switchCase = (item, y, y10, y50) => {
         item.classList.remove(y50);
         item.classList.remove(y10);
         item.classList.add(y);
     }
-    function switchCaseInt10(item,item1, y, y10, y50) {
+    const switchCase1 = (item, y, y10, y50) => {
+        item.classList.remove(y);
+        item.classList.remove(y50);
+        item.classList.add(y10);
+    }
+    const switchCaseInt10 = (item,item1, y, y10, y50) => {
         item.classList.remove(y10)
         item.classList.add(y)
         item1.classList.remove(y50)
         item1.classList.add(y10)
     }
-    function switchCaseInt50(item,item1, y, y10, y50) {
+    const switchCaseInt50 = (item,item1, y, y10, y50) => {
         item.classList.remove(y50);
         item.classList.add(y);
         item1.classList.remove(y50)
         item1.classList.add(y10)
     }
 
-    console.log(rangeValue);
     switch (true) {
         case rangeValue <= 0 :
             switchCaseZero(allRangeInput, yellow, yellow10, yellow50)
@@ -186,28 +211,48 @@ rangeInput.addEventListener('input', (event) =>{
         case rangeValue >= 0.1 && rangeValue <= 0.8 :
             allRangeInput[0].classList.remove(yellow)
             allRangeInput[0].classList.add(yellow50)
-            switchCaseZero()
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[1], yellow, yellow10, yellow50)
             break
 
         case rangeValue >= 0.9 && rangeValue <= 1 :
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[1], yellow, yellow10, yellow50)
             switchCaseInt10(allRangeInput[0], allRangeInput[1], yellow, yellow10, yellow50)
             break
 
         case rangeValue >= 1.1 && rangeValue <= 1.8 :
             switchCase(allRangeInput[0], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[1], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
             break
         case rangeValue >= 1.9 && rangeValue <= 2:
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
             switchCaseInt50(allRangeInput[1], allRangeInput[2], yellow, yellow10, yellow50)
             break;
 
         case rangeValue >= 2.1 && rangeValue <= 2.8 :
             switchCase(allRangeInput[0], yellow, yellow10, yellow50)
             switchCase(allRangeInput[1], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[2],yellow,yellow10,yellow50)
             break;
 
         case rangeValue >= 2.9 && rangeValue <= 3:
+            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
             switchCaseInt50(allRangeInput[2], allRangeInput[3], yellow, yellow10, yellow50)
             break;
 
@@ -215,10 +260,14 @@ rangeInput.addEventListener('input', (event) =>{
             switchCase(allRangeInput[0], yellow, yellow10, yellow50)
             switchCase(allRangeInput[1], yellow, yellow10, yellow50)
             switchCase(allRangeInput[2], yellow, yellow10, yellow50)
+            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
             switchCaseDecimal(allRangeInput[3],yellow,yellow10,yellow50)
             break;
 
         case rangeValue >= 3.9 && rangeValue <=4:
+            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
+            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
             switchCaseInt50(allRangeInput[3], allRangeInput[4], yellow, yellow10, yellow50)
             break;
 
@@ -234,12 +283,22 @@ rangeInput.addEventListener('input', (event) =>{
                 e.classList.remove(yellow50);
                 e.classList.add(yellow)
             })
+            break;
     }
 })
 
 let modalCancelButton = document.querySelector('.cancel');
-modalCancelButton.addEventListener('click', ()=>{
-    rangeInput.value = 0;
+modalCancelButton?.addEventListener('click', ()=>{
+    allRangeInput.forEach((rang) => {
+        rang.classList.remove(yellow)
+        rang.classList.remove(yellow50)
+        rang.classList.add(yellow10)
+    })
+    if(rangeInput && textarea && commentHelp) {
+        rangeInput.value = 0;
+        textarea.value = ''
+        commentHelp.innerHTML = '0/300 caractères max.'
+    }
 });
 
 

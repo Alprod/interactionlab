@@ -33,9 +33,6 @@ class FeedbackType extends AbstractType
 					'maxLength' => 300,
 					'placeholder' => 'message...'
 				],
-				'help' => 'Max 300 caractères',
-				'help_attr' => ['class' => 'text-sm text-gray-100 italic dark:text-gray-100'
-				],
 				'constraints' => [
 					new NotBlank([
 						'message' => 'Ce champs ne doit être vide'
