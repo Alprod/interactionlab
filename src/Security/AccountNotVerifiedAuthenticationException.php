@@ -7,7 +7,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AccountNotVerifiedAuthenticationException extends AuthenticationException
 {
-	public function __construct(string $message = '', int $code = 0, \Throwable $previous = null, private RequestStack $stack)
+	public function __construct(string $message = '', int $code = 0, \Throwable $previous = null)
 	{
 		parent::__construct( $message, $code, $previous );
 	}

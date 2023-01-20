@@ -156,6 +156,7 @@ btnFeedSend?.addEventListener('click', () => {
 
 
 
+
 let allRangeInput = document.querySelectorAll('.range');
 let rangeInput = document.getElementById('feedback_grade');
 let yellow = 'text-yellow-300';
@@ -287,6 +288,7 @@ rangeInput?.addEventListener('input', (event) =>{
     }
 })
 
+//reset datas de la modal
 let modalCancelButton = document.querySelector('.cancel');
 modalCancelButton?.addEventListener('click', ()=>{
     allRangeInput.forEach((rang) => {
@@ -301,4 +303,21 @@ modalCancelButton?.addEventListener('click', ()=>{
     }
 });
 
+//couleur des étoiles dans la page interaction
+let dataGrades = document.querySelector('#rate_grade_star');
+let grades = dataGrades.dataset.grades
+let allNoteClass = document.querySelectorAll('.note')
+console.log(allNoteClass[0].classList)
+if (grades >= 0 && grades < 10 ) {
+    allNoteClass[0].classList.remove(yellow10);
+    allNoteClass[0].classList.add(yellow);
+}
+if (grades >= 60) {
+    allNoteClass[0].classList.remove(yellow10);
+    allNoteClass[0].classList.add(yellow);
+    allNoteClass[1].classList.remove(yellow10);
+    allNoteClass[1].classList.add(yellow);
+    allNoteClass[2].classList.remove(yellow10);
+    allNoteClass[2].classList.add(yellow);
+}
 
