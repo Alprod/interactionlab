@@ -19,7 +19,7 @@
                     <input type="text" name="id" value="" id="uid" hidden/>
                     <input type="text" name="email" value="" id="uemail" hidden/>
                     {% if countfeedToday >= 5 %}
-                        <p class="text-gray-500 font-semibold dark:text-gray-100">Desoler {{ app.user.fullName }} vous avez atteint votre quota de feedback pour aujourd'hui qui est de 5/jours</p>
+                        <p class="text-gray-500 font-semibold dark:text-gray-100">Désoler {{ app.user.fullName }} vous avez atteint votre quota de feedback pour aujourd'hui qui est de 5/jours</p>
                     {% else %}
                         <div class='flex flex-row items-center'>
                             <div id='rangeInputId_1' class='range text-yellow-300/10'>
@@ -64,10 +64,10 @@
                         {{ form_label(feedForm.comment) }}
                         {{ form_widget(feedForm.comment) }}
 
-                        {{ form_help(feedForm.comment) }}
-                        <span id="errorMessage" class="text-red-500 italic font-semibold">
+                        <p id="comment_help" class="text-sm text-gray-800 italic dark:text-gray-100"></p>
+                        <p id="errorMessage" class="text-red-500 italic font-semibold">
                             {{ form_errors(feedForm.comment) }}
-                        </span>
+                        </p>
                     {% endif %}
                 </div>
                 <div class="mt-5 sm:mt-4 sm:ml-3 sm:flex">
