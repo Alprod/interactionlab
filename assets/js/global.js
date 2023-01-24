@@ -1,3 +1,5 @@
+import {switchColors, switchCase1} from "./switchCaseRemoveStarColors";
+
 console.log('je suis global');
 //Changer en dark mode
 // Icon
@@ -164,135 +166,15 @@ let yellow50 = 'text-yellow-300/50';
 if(rangeInput) rangeInput.value = 0;
 
 rangeInput?.addEventListener('input', (event) =>{
-
     let rangeValue = event.target.value;
-    const switchCaseZero = (item, y, y10, y50) => {
-        item?.forEach((i) => {
-            i.classList.remove(y)
-            i.classList.remove(y50)
-            i.classList.add(y10)
-        })
-    }
-
-    const switchCaseDecimal = (item, y, y10, y50) => {
-        item.classList.remove(y);
-        item.classList.remove(y10);
-        item.classList.add(y50);
-    }
-
-    const switchCase = (item, y, y10, y50) => {
-        item.classList.remove(y50);
-        item.classList.remove(y10);
-        item.classList.add(y);
-    }
-    const switchCase1 = (item, y, y10, y50) => {
-        item.classList.remove(y);
-        item.classList.remove(y50);
-        item.classList.add(y10);
-    }
-    const switchCaseInt10 = (item,item1, y, y10, y50) => {
-        item.classList.remove(y10)
-        item.classList.add(y)
-        item1.classList.remove(y50)
-        item1.classList.add(y10)
-    }
-    const switchCaseInt50 = (item,item1, y, y10, y50) => {
-        item.classList.remove(y50);
-        item.classList.add(y);
-        item1.classList.remove(y50)
-        item1.classList.add(y10)
-    }
-
-    switch (true) {
-        case rangeValue <= 0 :
-            switchCaseZero(allRangeInput, yellow, yellow10, yellow50)
-            break
-        case rangeValue >= 0.1 && rangeValue <= 0.8 :
-            allRangeInput[0].classList.remove(yellow)
-            allRangeInput[0].classList.add(yellow50)
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[1], yellow, yellow10, yellow50)
-            break
-
-        case rangeValue >= 0.9 && rangeValue <= 1 :
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCaseInt10(allRangeInput[0], allRangeInput[1], yellow, yellow10, yellow50)
-            break
-
-        case rangeValue >= 1.1 && rangeValue <= 1.8 :
-            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCaseDecimal(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
-            break
-        case rangeValue >= 1.9 && rangeValue <= 2:
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCaseInt50(allRangeInput[1], allRangeInput[2], yellow, yellow10, yellow50)
-            break;
-
-        case rangeValue >= 2.1 && rangeValue <= 2.8 :
-            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCaseDecimal(allRangeInput[2],yellow,yellow10,yellow50)
-            break;
-
-        case rangeValue >= 2.9 && rangeValue <= 3:
-            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCaseInt50(allRangeInput[2], allRangeInput[3], yellow, yellow10, yellow50)
-            break;
-
-        case rangeValue >= 3.1 && rangeValue <= 3.8:
-            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCase1(allRangeInput[4], yellow, yellow10, yellow50)
-            switchCaseDecimal(allRangeInput[3],yellow,yellow10,yellow50)
-            break;
-
-        case rangeValue >= 3.9 && rangeValue <=4:
-            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCaseInt50(allRangeInput[3], allRangeInput[4], yellow, yellow10, yellow50)
-            break;
-
-        case rangeValue >= 4.1 && rangeValue <= 4.8:
-            switchCase(allRangeInput[0], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[1], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[2], yellow, yellow10, yellow50)
-            switchCase(allRangeInput[3], yellow, yellow10, yellow50)
-            switchCaseDecimal(allRangeInput[4],yellow,yellow10,yellow50)
-            break;
-        case rangeValue >= 4.9:
-            allRangeInput.forEach((e) => {
-                e.classList.remove(yellow50);
-                e.classList.add(yellow)
-            })
-            break;
-    }
+    switchColors(allRangeInput, rangeValue, yellow, yellow10, yellow50)
 })
 
 //reset datas de la modal
 let modalCancelButton = document.querySelector('.cancel');
 modalCancelButton?.addEventListener('click', ()=>{
     allRangeInput.forEach((rang) => {
-        rang.classList.remove(yellow)
-        rang.classList.remove(yellow50)
-        rang.classList.add(yellow10)
+        switchCase1(rang, yellow, yellow10, yellow50);
     })
     if(rangeInput && textarea && commentHelp) {
         rangeInput.value = 0;
@@ -305,17 +187,13 @@ modalCancelButton?.addEventListener('click', ()=>{
 let dataGrades = document.querySelector('#rate_grade_star');
 let grades = dataGrades.dataset.grades
 let allNoteClass = document.querySelectorAll('.note')
-console.log(allNoteClass[0].classList)
-if (grades >= 0 && grades < 10 ) {
-    allNoteClass[0].classList.remove(yellow10);
-    allNoteClass[0].classList.add(yellow);
-}
-if (grades >= 60) {
-    allNoteClass[0].classList.remove(yellow10);
-    allNoteClass[0].classList.add(yellow);
-    allNoteClass[1].classList.remove(yellow10);
-    allNoteClass[1].classList.add(yellow);
-    allNoteClass[2].classList.remove(yellow10);
-    allNoteClass[2].classList.add(yellow);
-}
 
+switchColors(allNoteClass, grades, yellow, yellow10, yellow50);
+
+let dataCardGrades = document.querySelectorAll('.cardStart')
+
+dataCardGrades.forEach((card) => {
+    let targetDataCard = card.dataset.gradesCard
+    let allCardClass = card.querySelectorAll(".starCard")
+    switchColors(allCardClass, targetDataCard, yellow, yellow10, yellow50)
+})

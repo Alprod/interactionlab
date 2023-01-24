@@ -77,14 +77,14 @@ class HomeController extends AbstractController
 		$allFeedReceived = $this->allFeedbacksSendOrReceivedUserCurrent( $feedbackRepo, $today, 'received' );
 
 		$scoreTotalGrade = 0;
-		$middleScoreGradeInPercent = 0;
+		$middleScoreGrade = 0;
 
 		foreach ($feedbacksReceivedUserCurrent as $receivedUserCurrent ){
 			$scoreTotalGrade += $receivedUserCurrent->getGrade();
 		}
 
 		if( $scoreTotalGrade > 0){
-			$middleScoreGradeInPercent += round( ( 100/$scoreTotalGrade ) * count( $feedbacksReceivedUserCurrent) , 0 );
+			$middleScoreGrade += round( $scoreTotalGrade / count( $feedbacksReceivedUserCurrent) , 1 );
 		}
 
 		$issuFeedToday = $feedbackRepo->findIssueFeedbackSince($user, $today);
@@ -103,7 +103,7 @@ class HomeController extends AbstractController
 			'interactions' => $interactions,
 			'allFeedsSend' => $allFeedsSend,
 			'allFeedReceived' => $allFeedReceived,
-			'middleScoreGradeInPercent' => $middleScoreGradeInPercent,
+			'middleScoreGrade' => $middleScoreGrade,
 			'feedForm' => $feedForm->createView()
 		]);
 	}

@@ -67,7 +67,7 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 			$datas[$k] = [
 				'username' => $feedback->getReceived()->fullName(),
 				'sender' => $feedback->getIssue()->fullName(),
-				'grade' => round(100/5, 2) * $feedback->getGrade(),
+				'grade' => $feedback->getGrade(),
 				'gapFeed' => $gapFeed
 			];
 
