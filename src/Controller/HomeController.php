@@ -108,7 +108,10 @@ class HomeController extends AbstractController
 		]);
 	}
 
-	private function allFeedbacksSendOrReceivedUserCurrent(
+    /**
+     * @throws \Exception
+     */
+    private function allFeedbacksSendOrReceivedUserCurrent(
 		FeedbackRepository $feedbackRepo,
 		\DateTime $today,
 		string $tableField): array
