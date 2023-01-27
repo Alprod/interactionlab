@@ -39,6 +39,23 @@ class FeedbackRepository extends ServiceEntityRepository
         }
     }
 
+	public function findAllFeedBackIssues($issues)
+	{
+		return $this->createQueryBuilder('f')
+			->where('f.issue = :issue')
+			->setParameter('issue', $issues)
+			->getQuery()
+			->getResult();
+	}
+	public function findAllFeedBackRecived($reciveds)
+	{
+		return $this->createQueryBuilder('f')
+			->where('f.received = :recived')
+			->setParameter('recived', $reciveds)
+			->getQuery()
+			->getResult();
+	}
+
 	public function findFeedbackSince($issue, $received, $date)
 	{
 		return $this->createQueryBuilder('f')

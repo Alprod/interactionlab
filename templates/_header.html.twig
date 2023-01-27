@@ -17,6 +17,7 @@
         </div>
         <div class="ml-4 mt-2 flex-shrink-0">
             {% if app.user %}
+            <a href='{{ path('app_profile') }}' class=''>Profile</a>
             <a href="{{ path('app_logout') }}" class="btn-red">Déconnexion</a>
             {% else %}
             <a href="{{ path('app_login') }}" class="btn-blue">Connexion</a>
