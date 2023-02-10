@@ -20,26 +20,8 @@
                             <div class="sm:col-span-2">
                                 <h2 class="text-3xl text-gray-900 font-extrabold tracking-tight sm:text-4xl dark:text-gray-300">Bonjour {{ app.user.fullName }}!</h2>
                                 <div class="space-y-4 prose">
-
-                                    <!-- Bar de progression des scores des feedbacks reçu par l'utilisateur courant --->
-                                    {% if middleScoreGrade == 0 and middleScoreGrade is defined %}
-                                        <p class="text-gray-600 dark:text-gray-400 py-3">Personne n'a encore écrit de feedback à votre sujet.</p>
-                                    {% else %}
                                         <p class="text-gray-600 dark:text-gray-400 pt-3">Retrouver la moyenne de votre score des feedbacks attribué par l'ensemble des participants</p>
-
-                                        <div id="rate_grade_star" class='flex flex-row items-center' data-grades="{{ middleScoreGrade }}">
-                                        {% for i in 1..5 %}
-                                        <div id='{{ 'starInputId_'~ i }}' class='note
-                                        text-yellow-300/10'>
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0
-                                            24 24" fill="currentColor" class="w-8 h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 rate_start">
-                                              <path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        {% endfor %}
-                                        </div>
-                                    {% endif %}
-
+                                        {% include 'includes/_start_rate.html.twig' with {idGrade:'interaction_page_rate_star', scoreGrade:middleScoreGrade, class:'interaction_page', size_start:'start_inter' } %}
                                     <div class="flex space-x-2 mt-12">
                                         <button id="btn-feed-received" class="btn-feed-received">FeedBack Reçu</button>
                                         <button id="btn-feed-send" class="btn-feed-send">FeedBack Envoyer</button>
@@ -121,4 +103,8 @@
 </div>
     <!-- Modal feedback include --->
     {{ include('home/_modal_feedback.html.twig',{ feedForm : feedForm, countfeedToday: countfeedToday } ) }}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('inter') }}
 {% endblock %}
