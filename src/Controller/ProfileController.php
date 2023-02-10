@@ -15,10 +15,10 @@ class ProfileController extends AbstractController
 		$today = new \DateTime('now');
 	    $userCurrent = $this->getUser();
 		$issues = $feedRepo->findAllFeedBackIssues($userCurrent);
-		$reciveds = $feedRepo->findAllFeedBackRecived($userCurrent);
+		$receives = $feedRepo->findAllFeedBackRecived($userCurrent);
         return $this->render('profile/index.html.twig', [
 			'issues' => $issues,
-			'reciveds' => $reciveds
+			'receives' => $receives
         ]);
     }
 }
