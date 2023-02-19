@@ -16,12 +16,32 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FeedbackRepository extends ServiceEntityRepository
 {
+	private string $tableName;
+
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Feedback::class);
     }
 
-    public function add(Feedback $entity, bool $flush = false): void
+	/**
+	 * @return string
+	 */
+	public function getTableName(): string
+	{
+		return $this->tableName;
+	}
+
+	/**
+	 * @param string $tableName
+	 */
+	public function setTableName(string $tableName): void
+	{
+		$this->tableName = htmlspecialchars($tableName) ;
+	}
+
+
+	public function add(Feedback $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -44,30 +64,44 @@ class FeedbackRepository extends ServiceEntityRepository
 		return $this->createQueryBuilder('f')
 			->where('f.issue = :issue')
 			->setParameter('issue', $issues)
+			->orderBy('f.createdAt','DESC')
 			->getQuery()
 			->getResult();
 	}
 	public function findAllFeedBackRecived($reciveds)
 	{
 		return $this->createQueryBuilder('f')
-			->where('f.received = :recived')
-			->setParameter('recived', $reciveds)
+			->where('f.received = :received')
+			->setParameter('received', $reciveds)
+			->orderBy('f.createdAt','DESC')
 			->getQuery()
 			->getResult();
 	}
 
-	public function findFeedbackSince($issue, $received, $date)
+
+	public function findIssueFeedbackSendBetweenDate($param, $start, $end)
 	{
-		return $this->createQueryBuilder('f')
-		            ->where('f.issue = :issue')->setParameter('issue', $issue)
-		            ->andWhere('f.received = :received')->setParameter('received', $received)
-		            ->andWhere('f.createdAt >= :date')->setParameter('date', $date)
-		            ->getQuery()
-		            ->getResult()
-		;
+		$qb = $this->createQueryBuilder('f');
+
+		$qb->where('f.'.$this->getTableName().' = :table')
+		   ->andWhere($qb->expr()
+		                 ->between(
+							 'f.createdAt',
+							 ':start',
+							 ':end'
+            ))
+			->setParameters([
+				'table'=> $param,
+				'start' => $start->format('Y/m/d'),
+				'end' => $end->format('Y/m/d')
+            ])
+			->orderBy('f.createdAt', 'DESC');
+		return $qb->getQuery()
+		          ->getResult();
+
 	}
 
-	public function findIssueFeedbackSince($issue, $date)
+	public function findIssueFeedbackSinceBefore($issue, $date)
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.issue = :issue')->setParameter('issue', $issue)
@@ -77,7 +111,8 @@ class FeedbackRepository extends ServiceEntityRepository
 			->getResult();
 	}
 
-	public function findReceivedFeedbackSince($received, $date)
+
+	public function findReceivedFeedbackToday($received, $date)
 	{
 		return $this->createQueryBuilder('f')
 			->where('f.received = :received')->setParameter('received', $received)
