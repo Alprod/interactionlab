@@ -17,7 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+
+	public function __construct(private AllFeedbacksSendingOrReceivedByUserCurrentService $allFeedbacksUserCurrent) {}
+
+	#[Route('/', name: 'app_home')]
     public function index(): Response
     {
         return $this->render('home/index.html.twig');
@@ -73,8 +76,10 @@ class HomeController extends AbstractController
 			return $this->redirectToRoute('app_interactions');
 		}
 
-		$allFeedsSend =  $this->allFeedbacksSendOrReceivedUserCurrent( $feedbackRepo, $today,'issue' );
-		$allFeedReceived = $this->allFeedbacksSendOrReceivedUserCurrent( $feedbackRepo, $today, 'received' );
+		$allFeedsSend =  $this->allFeedbacksUserCurrent
+			->allFeedbacksSendOrReceivedUserCurrent($user, $feedbackRepo,$today,'issue');
+		$allFeedReceived = $this->allFeedbacksUserCurrent
+			->allFeedbacksSendOrReceivedUserCurrent($user, $feedbackRepo,$today,'received');
 
 		$scoreTotalGrade = 0;
 		$middleScoreGrade = 0;
@@ -87,7 +92,8 @@ class HomeController extends AbstractController
 			$middleScoreGrade += round( $scoreTotalGrade / count( $feedbacksReceivedUserCurrent) , 1 );
 		}
 
-		$issuFeedToday = $feedbackRepo->findIssueFeedbackSince($user, $today);
+		$issuFeedToday = $feedbackRepo->findIssueFeedbackSinceBefore($user, $today);
+
 		$count = 0;
 		foreach ($issuFeedToday as $feedToday) {
 			$todayFeed = $feedToday->getCreatedAt()->format('Y-m-d');
@@ -107,19 +113,4 @@ class HomeController extends AbstractController
 			'feedForm' => $feedForm->createView()
 		]);
 	}
-
-    /**
-     * @throws \Exception
-     */
-    private function allFeedbacksSendOrReceivedUserCurrent(
-		FeedbackRepository $feedbackRepo,
-		\DateTime $today,
-		string $tableField): array
-	{
-		$checkDateGap = new AllFeedbacksSendingOrReceivedByUserCurrentService();
-		$checkDateGap->setTableField($tableField);
-		return $checkDateGap->checkDateGapFeedbacks( $feedbackRepo, $this->getUser(), $today );
-	}
-
-
 }
