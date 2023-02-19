@@ -2,8 +2,10 @@
 
 namespace App\Service;
 
+use App\Entity\User;
 use App\Repository\FeedbackRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AllFeedbacksSendingOrReceivedByUserCurrentService
 {
@@ -33,7 +35,9 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 	{
 		$datas =[];
 		$gapFeed = '';
-		$allFeedsSend = $allFeed->findBy([ $this->getTableField() => $userCurrent ], ['createdAt' => 'DESC']);
+		$allFeedsSend = $allFeed->findBy(
+			[ $this->getTableField() => $userCurrent ],
+			['createdAt' => 'DESC']);
 
 		foreach ($allFeedsSend as $k => $feedback){
 			$dateReceived  = $feedback->getCreatedAt();
@@ -49,13 +53,13 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 				case $diffDate->d === 0:
 					$gapFeed = "Aujourd'hui";
 					break;
-				case $diffDate->d === 1:
+				case $diffDate->days === 1:
 					$gapFeed = 'Hier';
 					break;
-				case $diffDate->d >= 2 && $diffDate->d < 14 :
+				case $diffDate->days >= 2 && $diffDate->days < 14 :
 					$gapFeed = 'Il y a ' . $diffDate->format('%d jours');
 					break;
-				case $diffDate->d >= 14 && $diffDate->d < 30 :
+				case $diffDate->days >= 14 && $diffDate->days < 30 :
 					$gap = round($diffDate->d/7,0);
 					$gapFeed = 'Il y a ' . $gap . ' semaines.';
 					break;
@@ -68,10 +72,25 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 				'username' => $feedback->getReceived()->fullName(),
 				'sender' => $feedback->getIssue()->fullName(),
 				'grade' => $feedback->getGrade(),
-				'gapFeed' => $gapFeed
+				'gapFeed' => $gapFeed,
+				'createdAt' => $feedback->getCreatedAt(),
+				'comment' => $feedback->getComment(),
 			];
 
 		}
 		return $datas;
+	}
+
+	/**
+	 * @throws \Exception
+	 */
+	public function allFeedbacksSendOrReceivedUserCurrent(
+		UserInterface $userCurrent,
+		FeedbackRepository $feedbackRepo,
+		\DateTime $today,
+		string $tableField): array
+	{
+		$this->setTableField($tableField);
+		return $this->checkDateGapFeedbacks( $feedbackRepo, $userCurrent, $today );
 	}
 }
