@@ -44,13 +44,12 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 			$dateStart = new \DateTime($today->format('Y-m-d'));
 			$dateEnd =new \DateTime($dateReceived->format('Y-m-d'));
 			$diffDate = $dateStart->diff($dateEnd);
-			
 
 			switch ($diffDate):
 				case $diffDate->y >= 1:
 					$gapFeed = 'Il y a '. $diffDate->format('%y'. ($diffDate->y === 1) ? ' an':' ans');
 					break;
-				case $diffDate->d === 0:
+				case $diffDate->days === 0:
 					$gapFeed = "Aujourd'hui";
 					break;
 				case $diffDate->days === 1:
@@ -69,6 +68,8 @@ class AllFeedbacksSendingOrReceivedByUserCurrentService
 			endswitch;
 
 			$datas[$k] = [
+				'issueId' => $feedback->getIssue()->getId(),
+				'receivedId' => $feedback->getReceived()->getId(),
 				'username' => $feedback->getReceived()->fullName(),
 				'sender' => $feedback->getIssue()->fullName(),
 				'grade' => $feedback->getGrade(),

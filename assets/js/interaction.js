@@ -29,7 +29,7 @@ document.getElementsByName('user').forEach((u) =>{
 let submitButton = document.querySelector('.submited');
 let textarea = document.getElementById('feedback_comment');
 let commentHelp = document.getElementById('comment_help')
-
+console.log(textarea)
 let num = 0
 if(commentHelp) commentHelp.innerHTML = num +'/300 caractères max.'
 textarea?.addEventListener('keyup', (e) => {
@@ -115,4 +115,17 @@ dataCardGrades.forEach((card) => {
   let targetDataCard = card.dataset.grades
   let allCardClass = card.querySelectorAll(".start_card")
   switchColors(allCardClass, targetDataCard, yellow, yellow10, yellow50)
+})
+
+let feedSend = document.querySelectorAll('.feedSend')
+let dataButtonFeedback = document.querySelectorAll('.dataButtonFeedback')
+
+feedSend.forEach((fd) => {
+  dataButtonFeedback.forEach((dbf) => {
+    let data = parseInt(dbf.dataset.uid)
+    let feed = parseInt(fd.dataset.uid)
+    if(data === feed){
+      dbf.classList.add('hidden')
+    }
+  })
 })

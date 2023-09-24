@@ -20,7 +20,8 @@
                 <a href='{{ path('app_profile') }}' class='btn-profile font-extrabold'>Profile</a>
                 <a href="{{ path('app_logout') }}" class="btn-red font-extrabold">Déconnexion</a>
             {% else %}
-                <a href="{{ path('app_login') }}" class="btn-blue font-extrabold">Connexion</a>
+                <a href="{{ path('app_login') }}" class="btn-blue font-extrabold mt-3">Connexion</a>
+                <a href="{{ path('app_register') }}" class="btn-green font-extrabold mt-3">Inscription</a>
             {% endif %}
 
         </div>

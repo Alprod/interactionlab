@@ -29,13 +29,11 @@
 
                                     <div class="text-lg">
                                         <div id="allFeedbackCurrent" class="text-lg leading-6 font-medium space-y-1">
-
                                             <!-- list des feedbacks envoyés par l'utilisateur courant !!! Attention si vous modifiez la couleur la condition n'est pas remplit !!! --->
                                             {% include 'home/_card_feedbacks_list.html.twig' with { allFeeds : allFeedsSend, state: 'send', color: 'violet' } %}
 
                                             <!-- list des feedbacks reçus par l'utilisateur courant !!! Attention si vous modifiez la couleur la condition n'est pas remplit !!! --->
                                             {% include 'home/_card_feedbacks_list.html.twig' with { allFeeds : allFeedReceived, state: 'received', color: 'emerald' } %}
-
 
                                         </div>
                                     </div>
@@ -79,7 +77,7 @@
                                 </dl>
                                 --->
                             </div>
-                            <div>
+                            <div class='buttonFeedClick'>
                                 <div class="feedbackButton -mt-px flex divide-x divide-gray-200">
                                     <div class="-ml-px w-0 flex-1 flex dark:hover:bg-slate-400 hover:bg-slate-700 hover:opacity-30 hover:rounded-br-lg hover:rounded-bl-lg focus:bg-slate-700  focus:opacity-30 focus:rounded-br-lg focus:rounded-bl-lg">
 
