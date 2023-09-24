@@ -53,7 +53,7 @@ class Feedback
 
     public function setComment(?string $comment): self
     {
-        $this->comment = $comment;
+        $this->comment = htmlspecialchars($comment);
 
         return $this;
     }

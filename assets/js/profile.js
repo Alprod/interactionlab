@@ -94,4 +94,3 @@ openSideBar.addEventListener('click', ()=>{
   sideBar.classList.remove('hidden')
   openSideBar.classList.replace('xs:hidden', 'hidden')
 })
-

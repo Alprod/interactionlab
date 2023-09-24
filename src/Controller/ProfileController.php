@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\FeedbackRepository;
+use App\Repository\UserRepository;
 use App\Service\AllFeedbacksSendingOrReceivedByUserCurrentService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +17,7 @@ class ProfileController extends AbstractController
 	 * @throws \Exception
 	 */
 	#[Route('/profile', name: 'app_profile')]
-    public function index(FeedbackRepository $feedRepo): Response
+    public function index(FeedbackRepository $feedRepo, UserRepository $userRepo): Response
     {
 		$this->denyAccessUnlessGranted('ROLE_USER');
 
@@ -28,23 +29,29 @@ class ProfileController extends AbstractController
 		$feedRepo->setTableName('issue');
 		$issueBetweenDate15 = $feedRepo->findIssueFeedbackSendBetweenDate($userCurrent, $days_15,$today );
 		$issueBetweenDate30 = $feedRepo->findIssueFeedbackSendBetweenDate($userCurrent, $days_30,$today );
+		$AllIssues = $feedRepo->findAll();
 		
 		$feedRepo->setTableName('received');
 		$receivedsBetweenDate15 = $feedRepo->findIssueFeedbackSendBetweenDate($userCurrent, $days_15,$today );
 		$receivedsBetweenDate30 = $feedRepo->findIssueFeedbackSendBetweenDate($userCurrent, $days_30,$today );
-
+		$AllReceiveds = $feedRepo->findAll();
 
 		$issues = $feedRepo->findAllFeedBackIssues($userCurrent);
 
 		$receives = $feedRepo->findAllFeedBackRecived($userCurrent);
+		$userSubscribe = count($userRepo->findAll());
+
 
         return $this->render('profile/index.html.twig', [
-			'allIssues' => $issues,
-			'allReceives' => $receives,
+			'allIssuesCurrentUser' => $issues,
+			'allReceivesCurrentUser' => $receives,
 			'issuesBetweenDate15' => $issueBetweenDate15,
 			'issuesBetweenDate30' => $issueBetweenDate30,
 			'receivedsBetweenDate30' => $receivedsBetweenDate30,
-			'receivedsBetweenDate15' => $receivedsBetweenDate15
+			'receivedsBetweenDate15' => $receivedsBetweenDate15,
+			'userSubscribe' => $userSubscribe,
+			'allIssues' => $AllIssues,
+			'allReceives' => $AllReceiveds
         ]);
     }
 }

@@ -50,9 +50,9 @@
                 </div>
                 <div class="mt-5 sm:mt-4 sm:ml-3 sm:flex">
                     {% if countfeedToday < 5 %}
-                        <button type="submit" class="submited inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 mr-2 bg-sky-600 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:w-auto sm:text-sm">Envoyer</button>
+                        <button type="submit" class="submited inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 mr-2 mt-3 bg-sky-600 text-base font-medium text-white hover:bg-sky-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sky-500 sm:w-auto sm:text-sm">Envoyer</button>
                     {% endif %}
-                    <button type="button" class="cancel btn-red">Fermer</button>
+                    <button type="button" class="cancel inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 mr-2 mt-3 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:w-auto sm:text-sm sm:mt-3">Fermer</button>
                 </div>
             {{ form_end(feedForm, { render_rest: (countfeedToday < 5) ? true : false }) }}
 

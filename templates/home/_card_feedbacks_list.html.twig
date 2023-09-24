@@ -1,11 +1,12 @@
 <div id="card-feed-list-{{ state }}" class="hidden">
-    {% if allFeeds is defined and allFeeds is not null %}
-        <p class="text-gray-400 dark:text-gray-200">A ce jour vous avez {{ color == 'violet' ? 'envoyer' : 'reçu' }} {{ allFeeds|length ~ ' Feedback' }}</p>
+    {% if allFeeds|length >=1 %}
+        <p class="text-gray-400 dark:text-gray-200">Aujourd'hui vous avez {{ color == 'violet' ? 'envoyer' : 'reçu' }}</p>
 
         <div class="overflow-y-auto max-h-36 lg:max-h-56 md:max-h-56 shadow-inner rounded-lg p-4 not-prose">
             <ul role="list" class="mt-3 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3 ">
               {% for feedSend in allFeeds %}
-                  <li class="w-full bg-slate-100 lg:w-44 col-span-1 flex border-transparent shadow-lg rounded-md dark:bg-slate-600">
+                {% if feedSend.createdAt|date('Y/m/d') == date('now')|date('Y/m/d') %}
+                  <li data-uid='{{ feedSend.receivedId }}' class="feedSend w-full bg-slate-100 lg:w-44 col-span-1 flex border-transparent shadow-lg rounded-md dark:bg-slate-600">
                     <div class="flex-1 flex items-center justify-between rounded-lg truncate">
                       <div class="flex-1 px-4 py-2 text-sm truncate prose">
                         <p class="text-gray-900 font-medium dark:text-gray-300">{{ color == 'violet' ? feedSend.username : feedSend.sender }}</p>
@@ -14,10 +15,11 @@
                       </div>
                     </div>
                   </li>
+                {% endif %}
               {% endfor %}
             </ul>
         </div>
     {% else %}
-        <p class="text-gray-400 dark:text-gray-200"> Aucun feedback Envoyer </p>
+        <p class="text-gray-400 dark:text-gray-200"> Aucun feedback {{ color == 'violet' ? 'envoyer' : 'reçu' }} </p>
     {% endif %}
 </div>
